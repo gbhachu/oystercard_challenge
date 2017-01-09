@@ -30,5 +30,13 @@ describe Oystercard do
 	end
 
 	end
-
+describe '#deduct' do
+	it 'Should deduct money from card for fare' do
+		expect(subject).to respond_to(:deduct).with(1).argument
+	end
+	it 'should return 5' do
+		subject.top_up(10)
+		expect(subject.deduct(5)).to eq 5
+	end
+end
 end
