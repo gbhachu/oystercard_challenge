@@ -9,8 +9,7 @@ attr_reader :balance#, :limit
 	end
 
 	def top_up(amount)
-		err_message = "Limit is #{DEFAULT_LIMIT}, declined"
-		raise (err_message) if @balance + amount > DEFAULT_LIMIT
+		raise ("Limit is #{DEFAULT_LIMIT}, declined") if @balance + amount > DEFAULT_LIMIT
 		@balance += amount 
 	end
 

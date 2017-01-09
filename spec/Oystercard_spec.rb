@@ -21,9 +21,9 @@ describe Oystercard do
 
 		context 'Limit should set at 90' do
 			it 'should raise error if limit exceed 90' do
-			stub_const("DEFAULT_LIMIT", 90)
-			err_message = "Limit is #{DEFAULT_LIMIT}, declined"	
-			expect{subject.top_up(91)}.to raise_error(err_message)
+			default_limit = Oystercard::DEFAULT_LIMIT
+			subject.top_up(default_limit)
+			expect{subject.top_up(1)}.to raise_error("Limit is #{default_limit}, declined")
 			end
 		end
 
