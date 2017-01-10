@@ -39,4 +39,12 @@ describe '#deduct' do
 		expect(subject.deduct(5)).to eq 5
 	end
 end
+
+
 end
+describe '#touch_in' do
+	it 'touches in' do
+	oystercard = Oystercard.new.touch_in
+	expect(oystercard.in_journey).to eq true
+	end
+	end
