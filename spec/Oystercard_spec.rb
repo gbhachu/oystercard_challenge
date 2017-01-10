@@ -31,6 +31,9 @@ let(:exit_station) {double :station}
 	end
 
 	describe '#touch_in' do
+	before (:each) do
+		allow(card).to receive(:top_up).with(2)
+	end
 	#potentially use (:before) do end block here for card.top_up and card.touch_in
 		it 'touches in' do
 			card.top_up(2)
