@@ -2,7 +2,7 @@ require 'oystercard'
 
 describe Oystercard do
 subject(:card){ described_class.new}
-	
+
 	describe 'New instance' do
 		it 'should have a balance of 0' do
 		expect(card).to have_attributes(:balance => 0)
@@ -28,7 +28,7 @@ subject(:card){ described_class.new}
 		end
 	end
 
-		
+
 	describe '#deduct' do
 		it 'Should deduct money from card for fare' do
 		expect(card).to respond_to(:deduct).with(1).argument
@@ -41,13 +41,18 @@ subject(:card){ described_class.new}
 
 	describe '#touch_in' do
 		it 'touches in' do
+		card.top_up(0.5)
 		card.touch_in("Bank")
 		expect(card).to have_attributes(:in_journey => true)
+		end
+		it 'raise an error when insufficient funds on card' do
+			expect{card.touch_in('a')}.to raise_error('insufficient funds')
 		end
 	end
 
 	describe '#touch_out' do
 		it 'touches out' do
+		card.top_up(0.5)
 		card.touch_in("Bank")
 		card.touch_out("Liverpool Street")
 		expect(card).to have_attributes(:in_journey => false)
