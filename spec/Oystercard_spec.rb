@@ -29,19 +29,9 @@ subject(:card){ described_class.new}
 	end
 
 
-	describe '#deduct' do
-		it 'Should deduct money from card for fare' do
-		expect(card).to respond_to(:deduct).with(1).argument
-		end
-		it 'should return 5' do
-		card.top_up(10)
-		expect(card.deduct(5)).to eq 5
-		end
-	end
-
 	describe '#touch_in' do
 		it 'touches in' do
-		card.top_up(0.5)
+		card.top_up(2)
 		card.touch_in("Bank")
 		expect(card).to have_attributes(:in_journey => true)
 		end
@@ -52,10 +42,16 @@ subject(:card){ described_class.new}
 
 	describe '#touch_out' do
 		it 'touches out' do
-		card.top_up(0.5)
+		card.top_up(2)
 		card.touch_in("Bank")
 		card.touch_out("Liverpool Street")
 		expect(card).to have_attributes(:in_journey => false)
+		end
+		it 'touches out deducts amount' do
+			card.top_up(2)
+			card.touch_in("Bank")
+			expect {card.touch_out("Liverpool Street")}.to change{card.balance}.by(-1)
+
 		end
 	end
 
