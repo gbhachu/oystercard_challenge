@@ -1,50 +1,57 @@
 require 'oystercard'
 
 describe Oystercard do
-#subject(:oystercard) { described_class.new}
-	it 'should have a balance of 0' do
-		expect(subject).to have_attributes(:balance => 0)
+subject(:card){ described_class.new}
+	
+	describe 'New instance' do
+		it 'should have a balance of 0' do
+		expect(card).to have_attributes(:balance => 0)
+		end
 	end
-
-	#/it 'should have a balance of 20' do
-		#expect(Oystercard.new(20)).to have_attributes(:amount =>20)
-	#end/
 
 	describe '#top_up' do
 		context 'should allow card to be topped up' do
-			it 'should responds to one arguement' do
-			expect(subject).to respond_to(:top_up).with(1).argument
-		end
-			it 'should return 12' do
-			expect(subject.top_up(12)).to eq 12
+				it 'should responds to one arguement' do
+				expect(card).to respond_to(:top_up).with(1).argument
+				end
+				it 'should return 12' do
+				expect(card.top_up(12)).to eq 12
+				end
 		end
 
 		context 'Limit should set at 90' do
 			it 'should raise error if limit exceed 90' do
 			default_limit = Oystercard::DEFAULT_LIMIT
-			subject.top_up(default_limit)
-			expect{subject.top_up(1)}.to raise_error("Limit is #{default_limit}, declined")
+			card.top_up(default_limit)
+			expect{card.top_up(1)}.to raise_error("Limit is #{default_limit}, declined")
 			end
 		end
-
 	end
 
+		
+	describe '#deduct' do
+		it 'Should deduct money from card for fare' do
+		expect(card).to respond_to(:deduct).with(1).argument
+		end
+		it 'should return 5' do
+		card.top_up(10)
+		expect(card.deduct(5)).to eq 5
+		end
 	end
-describe '#deduct' do
-	it 'Should deduct money from card for fare' do
-		expect(subject).to respond_to(:deduct).with(1).argument
+
+	describe '#touch_in' do
+		it 'touches in' do
+		card.touch_in("Bank")
+		expect(card).to have_attributes(:in_journey => true)
+		end
 	end
-	it 'should return 5' do
-		subject.top_up(10)
-		expect(subject.deduct(5)).to eq 5
+
+	describe '#touch_out' do
+		it 'touches out' do
+		card.touch_in("Bank")
+		card.touch_out("Liverpool Street")
+		expect(card).to have_attributes(:in_journey => false)
+		end
 	end
+
 end
-
-
-end
-describe '#touch_in' do
-	it 'touches in' do
-	oystercard = Oystercard.new.touch_in
-	expect(oystercard.in_journey).to eq true
-	end
-	end
