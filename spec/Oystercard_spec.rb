@@ -31,10 +31,7 @@ let(:exit_station) {double :station}
 	end
 
 	describe '#touch_in' do
-	before (:each) do
-		allow(card).to receive(:top_up).with(2)
-	end
-	#potentially use (:before) do end block here for card.top_up and card.touch_in
+	
 		it 'touches in' do
 			card.top_up(2)
 			card.touch_in(entry_station)
@@ -50,24 +47,21 @@ let(:exit_station) {double :station}
 	end
 
 	describe '#touch_out' do
+		before(:each) do
+		    @card = card.top_up(2)
+		    @card = card.touch_in(entry_station)
+		 end
+
 		it 'touches out' do
-			card.top_up(2)
-			card.touch_in(entry_station)
-			card.touch_out("Liverpool Street")
+			card.touch_out(exit_station)
 			expect(card).to have_attributes(:in_journey => false)
 		end
 		it 'touches out deducts amount' do
-			card.top_up(2)
-			card.touch_in(entry_station)
-			expect {card.touch_out("Liverpool Street")}.to change{card.balance}.by(-1)
-
+			expect {card.touch_out(exit_station)}.to change{card.balance}.by(-1)
 		end
 		it 'touches out will set entry station to nil' do
-			card.top_up(2)
-			card.touch_in(entry_station)
 			card.touch_out(exit_station)
 			expect(card).to have_attributes(:entry_station => nil)
 		end
 	end
-
 end
