@@ -9,6 +9,9 @@ let(:exit_station) {double :station}
 		it 'should have a balance of 0' do
 			expect(card).to have_attributes(:balance => 0)
 		end
+		it 'should have no journeys' do
+			expect(card.journey).to eq({})
+		end
 	end
 
 	describe '#top_up' do
@@ -67,6 +70,11 @@ let(:exit_station) {double :station}
 			card.touch_in(entry_station)
 			card.touch_out(exit_station)
 			expect(card.exit_station).to eq exit_station
+		end
+		it 'stores journey' do
+			card.touch_in(entry_station)
+			card.touch_out(exit_station)
+			expect(card.journey).to eq({entry_station => exit_station})
 		end
 	end
 
