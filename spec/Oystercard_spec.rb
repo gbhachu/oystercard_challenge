@@ -53,27 +53,22 @@ let(:exit_station) {double :station}
 		before(:each) do
 		    @card = card.top_up(2)
 		    @card = card.touch_in(entry_station)
+				@card = card.touch_out(exit_station)
 		 end
 
 		it 'touches out' do
-			card.touch_out(exit_station)
 			expect(card).to have_attributes(:in_journey => false)
 		end
 		it 'touches out deducts amount' do
 			expect {card.touch_out(exit_station)}.to change{card.balance}.by(-1)
 		end
 		it 'touches out will save journey on card' do
-			card.touch_out(exit_station)
 			expect(card).to have_attributes(:entry_station => entry_station)
 		end
 		it 'stores exit station' do
-			card.touch_in(entry_station)
-			card.touch_out(exit_station)
 			expect(card.exit_station).to eq exit_station
 		end
 		it 'stores journey' do
-			card.touch_in(entry_station)
-			card.touch_out(exit_station)
 			expect(card.journey).to eq({entry_station => exit_station})
 		end
 	end

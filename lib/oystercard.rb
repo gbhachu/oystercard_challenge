@@ -1,8 +1,10 @@
+require 'station'
+
 class Oystercard
 
 DEFAULT_LIMIT = 90
 MIN_FARE = 1
-attr_reader :balance, :in_journey, :entry_station, :exit_station, :journey
+attr_reader :balance, :in_journey, :entry_station, :exit_station, :journey, :amount
 
 	def initialize
 	@balance = 0
@@ -13,7 +15,8 @@ attr_reader :balance, :in_journey, :entry_station, :exit_station, :journey
 	end
 
 	def top_up(amount)
-		raise ("Limit is #{DEFAULT_LIMIT}, declined") if @balance + amount > DEFAULT_LIMIT
+		@amount = amount
+		raise ("Limit is #{DEFAULT_LIMIT}, declined") if at_limit?
 		@balance += amount
 	end
 
@@ -39,6 +42,10 @@ private
 
 	def deduct
 		@balance -= MIN_FARE
+	end
+
+	def at_limit?
+		@balance + amount > DEFAULT_LIMIT
 	end
 
 end
