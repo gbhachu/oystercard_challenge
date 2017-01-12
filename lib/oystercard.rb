@@ -1,13 +1,13 @@
-require 'station'
+require_relative 'station'
 
 class Oystercard
 
 DEFAULT_LIMIT = 90
 MIN_FARE = 1
-attr_reader :balance, :in_journey, :entry_station, :exit_station, :journey, :amount
+attr_reader :balance, :in_journey, :entry_station, :end_station, :journey, :amount
 
-	def initialize
-	@balance = 0
+	def initialize(balance = 0)
+	@balance = balance
 	@in_journey = false
 	@journey = Hash.new
 
@@ -23,16 +23,15 @@ attr_reader :balance, :in_journey, :entry_station, :exit_station, :journey, :amo
 	def touch_in(entry_station)
 		raise 'insufficient funds' if @balance < MIN_FARE
 		@in_journey = true
-		@entry_station = entry_station
+		@entry_station = entry_station.name
 
 	end
 
 	def touch_out(exit_station)
 		deduct
 		@in_journey = false
-		@entry_station = entry_station
-		@exit_station = exit_station
-		@journey[entry_station] = exit_station
+		@end_station = exit_station.name
+		@journey[entry_station] = end_station
 
 	end
 

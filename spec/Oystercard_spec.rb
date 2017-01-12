@@ -2,8 +2,8 @@ require 'oystercard'
 
 describe Oystercard do
 subject(:card){ described_class.new}
-let(:entry_station) {double :station}
-let(:exit_station) {double :station}
+let(:start_station) {double :start_station, name: "Bank", zone: 1}
+let(:last_station) {double :last_station, name: "Picadilly", zone: 2}
 
 	describe 'New instance' do
 		it 'should have a balance of 0' do
@@ -37,39 +37,39 @@ let(:exit_station) {double :station}
 
 		it 'touches in' do
 			card.top_up(2)
-			card.touch_in(entry_station)
+			card.touch_in(start_station)
 			expect(card).to have_attributes(:in_journey => true)
 		end
 		it 'raise an error when insufficient funds on card' do
-			expect{card.touch_in(entry_station)}.to raise_error('insufficient funds')
+			expect{card.touch_in(start_station)}.to raise_error('insufficient funds')
 		end
 		it 'remembers entry station' do
 			card.top_up(2)
-			expect(card.touch_in(entry_station)).to eq entry_station
+			expect(card.touch_in(start_station)).to eq card.entry_station
 		end
 	end
 
 	describe '#touch_out' do
 		before(:each) do
 		    @card = card.top_up(2)
-		    @card = card.touch_in(entry_station)
-				@card = card.touch_out(exit_station)
+		    @card = card.touch_in(start_station)
+				@card = card.touch_out(last_station)
 		 end
 
 		it 'touches out' do
 			expect(card).to have_attributes(:in_journey => false)
 		end
 		it 'touches out deducts amount' do
-			expect {card.touch_out(exit_station)}.to change{card.balance}.by(-1)
+			expect {card.touch_out(last_station)}.to change{card.balance}.by(-1)
 		end
 		it 'touches out will save journey on card' do
-			expect(card).to have_attributes(:entry_station => entry_station)
+			expect(card.journey).to_not be_nil
 		end
 		it 'stores exit station' do
-			expect(card.exit_station).to eq exit_station
+			expect(card.end_station).to eq "Picadilly"
 		end
 		it 'stores journey' do
-			expect(card.journey).to eq({entry_station => exit_station})
+			expect(card.journey).to eq({"Bank" => "Picadilly"})
 		end
 	end
 
