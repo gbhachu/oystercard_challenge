@@ -1,4 +1,5 @@
 require_relative 'station'
+require_relative 'journey'
 
 class Oystercard
 
@@ -24,6 +25,7 @@ attr_reader :balance, :in_journey, :entry_station, :end_station, :journey, :amou
 		raise 'insufficient funds' if @balance < MIN_FARE
 		@in_journey = true
 		@entry_station = entry_station.name
+		newjourney = Journey.new(@entry_station)
 
 	end
 

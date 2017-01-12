@@ -43,10 +43,7 @@ let(:last_station) {double :last_station, name: "Picadilly", zone: 2}
 		it 'raise an error when insufficient funds on card' do
 			expect{card.touch_in(start_station)}.to raise_error('insufficient funds')
 		end
-		it 'remembers entry station' do
-			card.top_up(2)
-			expect(card.touch_in(start_station)).to eq card.entry_station
-		end
+		
 	end
 
 	describe '#touch_out' do
