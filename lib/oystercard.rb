@@ -10,7 +10,7 @@ attr_reader :balance, :in_journey, :entry_station, :end_station, :journey, :amou
 	def initialize(balance = 0)
 	@balance = balance
 	@in_journey = false
-	@journey = Hash.new
+	@journey = []
 
 
 	end
@@ -25,7 +25,7 @@ attr_reader :balance, :in_journey, :entry_station, :end_station, :journey, :amou
 		raise 'insufficient funds' if @balance < MIN_FARE
 		@in_journey = true
 		@entry_station = entry_station.name
-		newjourney = Journey.new(@entry_station)
+		#newjourney = Journey.new(@entry_station)
 
 	end
 
@@ -33,7 +33,11 @@ attr_reader :balance, :in_journey, :entry_station, :end_station, :journey, :amou
 		deduct
 		@in_journey = false
 		@end_station = exit_station.name
-		@journey[entry_station] = end_station
+		@journey << {entry_station:entry_station, exit_station:end_station}
+		#deduct @journey.end station
+		#newjourney = Journey.new(@end_station)
+
+
 
 	end
 
